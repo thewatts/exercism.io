@@ -60,6 +60,9 @@ class ExercismApp < Sinatra::Base
       else
         @current_user = Guest.new
       end
+    rescue
+      logout
+      @current_user = Guest.new
     end
 
     def md(text, language = nil)
