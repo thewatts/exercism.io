@@ -60,7 +60,7 @@ class ExercismApp < Sinatra::Base
       else
         @current_user = Guest.new
       end
-    rescue
+    rescue Mongoid::Errors::DocumentNotFound
       logout
       @current_user = Guest.new
     end
