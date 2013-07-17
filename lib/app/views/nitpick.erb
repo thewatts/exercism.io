@@ -19,7 +19,7 @@
     <% else %>
       <form class="bookmark" style="float:right;">
         <label class="checkbox">
-          <input type="checkbox" data-action="toggle-bookmark" data-submission-id="<%= submission.id %>" checked="<%= current_user.bookmarks.include?(submission) %>" />
+          <input type="checkbox" data-action="toggle-bookmark" data-submission-id="<%= submission.id %>" <%= "checked" if current_user.bookmarks.include?(submission) %> />
           Bookmark this conversation
         </label>
       </form>
