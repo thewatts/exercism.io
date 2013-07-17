@@ -123,4 +123,13 @@ class ExercismApp < Sinatra::Base
     end
   end
 
+  post '/submissions/:id/bookmark' do |id|
+    current_user.bookmark!(Submission.find(id))
+    halt 204
+  end
+
+  delete '/submissions/:id/bookmark' do |id|
+    current_user.unbookmark!(Submission.find(id))
+    halt 204
+  end
 end

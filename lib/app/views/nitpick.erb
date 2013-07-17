@@ -17,6 +17,12 @@
     <% if submission.nits.empty? %>
       <h2>Provide Feedback</h2>
     <% else %>
+      <form class="bookmark" style="float:right;">
+        <label class="checkbox">
+          <input type="checkbox" data-action="toggle-bookmark" data-submission-id="<%= submission.id %>" checked="<%= current_user.bookmarks.include?(submission) %>" />
+          Bookmark this conversation
+        </label>
+      </form>
       <h2>Nitpicks</h2>
     <% end %>
     <% submission.nits.each do |nit| %>

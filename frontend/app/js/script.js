@@ -46,6 +46,21 @@ $(function() {
     $('#revision-' + revisionId).toggle();
   });
 
+  $(".bookmark input[data-action='toggle-bookmark']").on("click",function() {
+     var checked = $(this).is(':checked');
+     var submission_id = $(this).data("submission-id");
+
+     if(checked) {
+       $.post("/submissions/" + submission_id + "/bookmark");
+     }
+     else {
+       $.ajax({
+         url: "/submissions/" + submission_id + "/bookmark",
+         type: 'DELETE'
+       });
+     }
+  });
+
   $('form input[type=submit], form button[type=submit]').on('click', function() {
     var $this = $(this);
     window.setTimeout(function() { $this.attr('disabled', true); }, 1);

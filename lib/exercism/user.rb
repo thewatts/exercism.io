@@ -14,7 +14,9 @@ class User
 
   alias_method :admin?, :is_admin
 
-  has_many :submissions
+  has_many :submissions, inverse_of: :user
+  has_many :approvals, class_name: "Submission", inverse_of: :approver
+  has_many :bookmarks, class_name: "Submission", inverse_of: :bookmared_by
 
   def self.from_github(id, username, email, avatar_url)
     user = User.where(github_id: id).first
@@ -71,6 +73,14 @@ class User
     self.completed[exercise.language] << exercise.slug
     self.current[exercise.language] = trail.after(exercise, completed[exercise.language]).slug
     save
+  end
+
+  def bookmark!(submission)
+    self.bookmarks << submission
+  end
+
+  def unbookmark!(submission)
+    self.bookmarks = bookmarks.reject {|b| b.eql?(submission) }
   end
 
   def completed?(exercise)

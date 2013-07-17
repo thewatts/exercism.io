@@ -8,8 +8,9 @@ class Submission
   field :at, type: Time, default: ->{ Time.now.utc }
   field :a_at, as: :approved_at, type: Time
 
-  belongs_to :approver, class_name: "User", foreign_key: "github_id"
-  belongs_to :user
+  belongs_to :user, inverse_of: :submissions
+  belongs_to :approver, class_name: "User", foreign_key: "github_id", inverse_of: :approvals
+  belongs_to :bookmared_by, class_name: "User", inverse_of: :bookmarks
   embeds_many :nits
 
   def self.pending
