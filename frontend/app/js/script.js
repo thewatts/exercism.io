@@ -48,17 +48,9 @@ $(function() {
 
   $(".bookmark input[data-action='toggle-bookmark']").on("click",function() {
      var checked = $(this).is(':checked');
-     var submission_id = $(this).data("submission-id");
+     var submissionId = $(this).data("submission-id");
 
-     if(checked) {
-       $.post("/submissions/" + submission_id + "/bookmark");
-     }
-     else {
-       $.ajax({
-         url: "/submissions/" + submission_id + "/bookmark",
-         type: 'DELETE'
-       });
-     }
+     toggleBookmark(submissionId, checked);
   });
 
   $('form input[type=submit], form button[type=submit]').on('click', function() {
@@ -66,3 +58,12 @@ $(function() {
     window.setTimeout(function() { $this.attr('disabled', true); }, 1);
   });
 });
+
+function toggleBookmark(submissionId, checked) {
+  var method = checked ? 'POST' : 'DELETE';
+
+  $.ajax({
+    url: "/submissions/" + submissionId + "/bookmark",
+    type: method
+  });
+};
