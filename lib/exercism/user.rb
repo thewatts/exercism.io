@@ -30,6 +30,10 @@ class User
     user
   end
 
+  def self.find_by_username(name)
+    where(username: /\A#{name}\z/i).first
+  end
+
   def random_work
     completed.keys.shuffle.each do |language|
       work = Submission.pending.where(language: language).in(slug: completed[language]).asc(:nc)
@@ -121,7 +125,7 @@ class User
     self.stashed_submissions.each do |sub|
       list << sub.stash_name
     end
-    return list 
+    return list
   end
 
   def clear_stash(filename)
