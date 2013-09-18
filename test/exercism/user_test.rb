@@ -108,6 +108,12 @@ class UserTest < Minitest::Test
     assert_equal 'old', user.avatar_url
   end
 
+  def test_finds_user_regardless_of_case_of_username
+    user = User.from_github(23, 'alice', 'alice@example.com', 'avatar_url')
+    insensitive_user = User.find_by_username('AlICe')
+    assert_equal user, insensitive_user
+  end
+
   def test_locksmith_is_nitpicker
     locksmith = User.new
     def locksmith.locksmith?
