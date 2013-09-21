@@ -20,12 +20,11 @@ class User
   has_many :comments
 
   def self.from_github(id, username, email, avatar_url)
-    user = User.where(github_id: id).first
-    user ||= User.new(username: username, github_id: id, email: email, avatar_url: avatar_url)
-    if avatar_url && !user.avatar_url
-      user.avatar_url = avatar_url.gsub(/\?.+$/, '')
-    end
-    user.username = username
+    user = User.where(github_id: id).first ||
+           User.new(github_id: id, email: email)
+
+    user.username   = username
+    user.avatar_url = avatar_url.gsub(/\?.+$/, '') if avatar_url && !user.avatar_url
     user.save
     user
   end
@@ -36,7 +35,7 @@ class User
 
   def random_work
     completed.keys.shuffle.each do |language|
-      work = Submission.pending.where(language: language).in(slug: completed[language]).asc(:nc)
+      work = Submission.pending.unmuted_for(username).where(language: language).in(slug: completed[language]).asc(:nc)
       if work.count > 0
         return work.limit(10).to_a.sample
       end
@@ -121,11 +120,7 @@ class User
   end
 
   def stash_list
-    list = []
-    self.stashed_submissions.each do |sub|
-      list << sub.stash_name
-    end
-    return list
+    self.stashed_submissions.map(&:stash_name)
   end
 
   def clear_stash(filename)
